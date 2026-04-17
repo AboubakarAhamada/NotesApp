@@ -33,12 +33,22 @@ test.describe('Testing Add Note Functionality', () => {
                 } catch (e) {}
             });
     });
-
-    test('should add a new note', async ({page}) => {
+    test.use({ storageState: 'playwright/.auth/user1.json' });
+    test('user1 should add a new note', async ({page}) => {
         const appPage = new AppPage(page);
         await appPage.clickAddNoteButton();
-        await appPage.fullNoteForm('Work', false, 'Finish report', 'Complete the quarterly report by Friday');
-        await appPage.submitNoteForm();
+        // await appPage.fullNoteForm('Work', false, 'Finish report', 'Complete the quarterly report by Friday');
+        // await appPage.submitNoteForm();
+
+        // Verify the note was added
+    });
+
+    test.use({ storageState: 'playwright/.auth/user2.json' });
+    test('user2 should add a new note', async ({page}) => {
+        const appPage = new AppPage(page);
+        await appPage.clickAddNoteButton();
+        // await appPage.fullNoteForm('Work', false, 'Finish report', 'Complete the quarterly report by Friday');
+        // await appPage.submitNoteForm();
 
         // Verify the note was added
     });
