@@ -32,19 +32,36 @@ export default defineConfig({
 
   // ✅ Configuration multi-navigateurs
   projects: [
+    // Setup project
+    { name: 'setup', testMatch: "auth.setup.ts" },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
+      use: {
+        ...devices['Desktop Chrome'],
+        // Use prepared auth state.
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-      timeout: 120000 // Timeout très long pour Firefox à cause des teardowns lents
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] }
-    },
+
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     ...devices['Desktop Firefox'],
+    //     // Use prepared auth state.
+    //     storageState: 'playwright/.auth/user.json',
+    //   },
+    //   dependencies: ['setup'],
+    // },
+    // {
+    //   name: 'webkit',
+    //   use: {
+    //     ...devices['Desktop Firefox'],
+    //     // Use prepared auth state.
+    //     storageState: 'playwright/.auth/user.json',
+    //   },
+    //   dependencies: ['setup'],
+    // },
 
     // ✅ Mobile (facultatif)
     // {

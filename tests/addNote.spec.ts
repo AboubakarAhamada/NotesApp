@@ -1,9 +1,12 @@
+import { test, expect } from '@playwright/test';
 import { AppPage } from '../pages/appPage';
-import { test} from '../fixtures/login_fixture';
+import { EnvData } from '../fixtures/env';
+
 
 test.describe('Testing Add Note Functionality', () => {
 
     test.beforeEach(async ({ page, context }) => {
+            await page.goto(EnvData.BASE_URL);
             // Bloquer les publicités et overlays
             await page.route('**/*', (route) => {
                 const url = route.request().url();
@@ -31,10 +34,8 @@ test.describe('Testing Add Note Functionality', () => {
             });
     });
 
-    test('should add a new note', async ({ loggedPage }) => {
-        const appPage = new AppPage(loggedPage);
-
-        await loggedPage.waitForURL('**/notes/app');
+    test('should add a new note', async ({page}) => {
+        const appPage = new AppPage(page);
         await appPage.clickAddNoteButton();
         await appPage.fullNoteForm('Work', false, 'Finish report', 'Complete the quarterly report by Friday');
         await appPage.submitNoteForm();

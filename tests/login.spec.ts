@@ -4,6 +4,7 @@ import { loginData } from '../fixtures/login_data';
 import { EnvData } from '../fixtures/env';
 import { blockAds } from '../utils/adBlocker';
 
+test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Testing Login Page', () => {
     test.beforeEach(async ({ page, context }) => {

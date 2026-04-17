@@ -5,6 +5,7 @@ export class AppPage {
     
     async clickAddNoteButton(){
         await this.page.getByTestId('add-new-note').click();
+
     } 
 
     async fullNoteForm(category: string, isCompleted: boolean, title: string, description

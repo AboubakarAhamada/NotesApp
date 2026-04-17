@@ -1,10 +1,11 @@
-import {test} from '@playwright/test';
+import {test,expect} from '@playwright/test';
 import { RegisterPage } from '../pages/registrerPage';
 import { registerData } from '../fixtures/register_data';
 import { EnvData } from '../fixtures/env';
 import { blockAds } from '../utils/adBlocker';
 
 
+test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Testing Registration Page', () => {
 

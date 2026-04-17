@@ -4,6 +4,7 @@ import { EnvData } from '../fixtures/env';
 import { blockAds } from '../utils/adBlocker';
 
 
+test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Testing Homepage', () => {
   let homePage: HomePage;
