@@ -18,7 +18,7 @@ export const test = base.extend<{
       } catch (e) { }
     });
 
-    await page.goto(EnvData.BASE_URL +'/login');
+    await page.goto(EnvData.BASE_URL +'app/login');
     await page.fill('#email', 'testoto@gmail.com');
     await page.fill('#password', 'testoto');
     await page.getByTestId('login-submit').click();

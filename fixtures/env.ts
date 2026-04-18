@@ -1,3 +1,3 @@
 export const EnvData = {
-    BASE_URL: 'https://practice.expandtesting.com/notes/app'
+    BASE_URL: 'https://practice.expandtesting.com/notes'
 };
