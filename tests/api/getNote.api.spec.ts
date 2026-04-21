@@ -1,29 +1,21 @@
 import { test, expect } from '@playwright/test';
 import { EnvData } from '../../fixtures/env';
 import { loginData } from '../../fixtures/login_data';
+import { authHeaders, getAuthToken } from '../../fixtures/auth.api';
 
 test.describe('Get Note API', () => {
     let noteId: string;
+    let token: string;
+    test.beforeAll(async ({ request }) => {
+        token = await getAuthToken(request);
+        console.log('Token from beforeAll:', token);
+    });
 
     test("should get note by Id for authenticated user", async ({ request }) => {
-        // Login to get the authentication token
-        const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login',
-            {
-                data: loginData
-            }
-        );
-
-        const loginResponseBody = await loginResponse.json();
-        const token = loginResponseBody.data.token;
-        console.log('Token:', token);
 
         // Add a new note
         const newNoteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-auth-token': token
-            },
+            headers: authHeaders(token),
             form: {
                 title: 'Note to retrieve by id',
                 category: 'Personal',
@@ -32,17 +24,14 @@ test.describe('Get Note API', () => {
         });
         const newNoteResponseBody = await newNoteResponse.json();
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
-
-
-
-        const notesResponse = await request.get(EnvData.BASE_URL + '/api/notes/' + noteId, {
+        const noteResponse = await request.get(EnvData.BASE_URL + '/api/notes/' + noteId, {
             headers: {
                 'X-Auth-Token': token
             }
         });
-        expect(notesResponse.status()).toBe(200);
+        expect(noteResponse.status()).toBe(200);
 
-        const noteResponseBody = await notesResponse.json();
+        const noteResponseBody = await noteResponse.json();
         console.log(noteResponseBody);
         expect(noteResponseBody).toHaveProperty('success', true);
         expect(noteResponseBody).toHaveProperty('data');
@@ -64,16 +53,6 @@ test.describe('Get Note API', () => {
     });
 
     test("should get all notes for authenticated user", async ({ request }) => {
-        // Login to get the authentication token
-        const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login',
-            {
-                data: loginData
-            }
-        );
-
-        const loginResponseBody = await loginResponse.json();
-        const token = loginResponseBody.data.token;
-        console.log('Token:', token);
 
         const notesResponse = await request.get(EnvData.BASE_URL + '/api/notes', {
             headers: {
@@ -94,7 +73,7 @@ test.describe('Get Note API', () => {
             expect(note).toHaveProperty('title');
             expect(note).toHaveProperty('description');
             expect(note).toHaveProperty('category');
-            expect(note).toHaveProperty('completed');  
+            expect(note).toHaveProperty('completed');
             expect(note).toHaveProperty('id');
             expect(note).toHaveProperty('created_at');
             expect(note).toHaveProperty('updated_at');
