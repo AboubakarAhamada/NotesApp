@@ -26,9 +26,9 @@ test.describe('Testing Login Page', () => {
     await loginPage.fillPassword(loginData.password);
     await loginPage.submitForm();
     await page.waitForURL(EnvData.BASE_URL+'/app'); 
-    expect(page.url()).not.toContain('/login');
-    expect(page.getByTestId('logout')).toBeVisible();
-    expect(page.getByTestId('profile')).toBeVisible();
+    await expect(page.url()).not.toContain('/login');
+    await expect(page.getByTestId('logout')).toBeVisible();
+    await expect(page.getByTestId('profile')).toBeVisible();
 });
 });
 

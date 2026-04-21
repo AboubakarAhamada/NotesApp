@@ -38,12 +38,12 @@ test.describe('Testing Homepage', () => {
   test('Verify navigation to register page', async ({ page }) => {
     await homePage.goToRegisterView();
     await page.waitForURL(/\/register$/, { timeout: 10000 }); // Utiliser regex pour ignorer les hashes
-    expect(page.url()).toMatch(/\/register$/);
+    await expect(page.url()).toMatch(/\/register$/);
   });
 
   test('Verify navigation to login page', async ({ page }) => {
     await homePage.goToLoginView();
     await page.waitForURL(/\/login$/, { timeout: 10000 }); // Utiliser regex pour ignorer les hashes
-    expect(page.url()).toMatch(/\/login$/);
+    await expect(page.url()).toMatch(/\/login$/);
   });
 });
