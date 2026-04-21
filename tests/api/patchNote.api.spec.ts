@@ -1,21 +1,17 @@
 import { test, expect } from '@playwright/test';
 import { EnvData } from '../../fixtures/env';
 import { loginData } from '../../fixtures/login_data';
+import { authHeaders, getAuthToken } from '../../fixtures/auth.api';
 
 test.describe('Patch Note API', () => {
     let noteId: string;
-
+    let token: string;
+      test.beforeAll(async ({ request }) => {
+        token = await getAuthToken(request);
+        console.log('Token from beforeAll:', token);
+      });
     test('should update existing note status', async ({ request }) => {
-        // Login to get the authentication token
-        const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login',
-            {
-                data: loginData
-            }
-        );
-
-        const loginResponseBody = await loginResponse.json();
-        const token = loginResponseBody.data.token;
-        console.log('Token:', token);
+        
         // Add a new note
         const nodeBody = {
             title: 'Note to Update',
@@ -23,11 +19,7 @@ test.describe('Patch Note API', () => {
             description: 'This note will be updated in the test'
         };
         const newNoteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-auth-token': token
-            },
+            headers:authHeaders(token),
             form: {
                 title: 'Note to Update',
                 category: 'Personal',
@@ -81,19 +73,10 @@ test.describe('Patch Note API', () => {
     });
 
     test.afterEach(async ({ request }) => {
-        // Login to get the authentication token
-        const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login',
-            {
-                data: loginData
-            }
-        );
-        const loginResponseBody = await loginResponse.json();
-        const token = loginResponseBody.data.token;
+        token = await getAuthToken(request);
+
         await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {
-            headers: {
-                'accept': 'application/json',
-                'X-auth-token': token
-            }
+            headers: authHeaders(token)
         });
     });
 

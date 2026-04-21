@@ -1,29 +1,22 @@
 import { test, expect } from '@playwright/test';
 import { EnvData } from '../../fixtures/env';
 import { loginData } from '../../fixtures/login_data';
+import { authHeaders, getAuthToken } from '../../fixtures/auth.api';
 
 test.describe('Delete Note API', () => {
 
     let noteId: string;
-    test('should delete existing note successfully', async ({ request }) => {
-        // Login to get the authentication token
-        const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login',
-            {
-                data: loginData
-            }
-        );
+    let token: string;
+    test.beforeAll(async ({ request }) => {
+        token = await getAuthToken(request);
+        console.log('Token from beforeAll:', token);
+    });
 
-        const loginResponseBody = await loginResponse.json();
-        const token = loginResponseBody.data.token;
-        console.log('Token:', token);
+    test('should delete existing note successfully', async ({ request }) => {
 
         // Add a new note
         const newNoteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-auth-token': token
-            },
+            headers: authHeaders(token),
             form: {
                 title: 'Note to Update',
                 category: 'Personal',
@@ -36,16 +29,13 @@ test.describe('Delete Note API', () => {
 
         // Delete a note
         const noteResponse = await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {
-            headers: {
-                'accept': 'application/json',
-                'X-auth-token': token
-            }
+            headers: authHeaders(token)
         });
         expect(noteResponse.status()).toBe(200);
 
         const noteResponseBody = await noteResponse.json();
         console.log(noteResponseBody);
         expect(noteResponseBody).toHaveProperty('success', true);
-        expect(noteResponseBody).toHaveProperty('message', 'Note successfully deleted'); 
+        expect(noteResponseBody).toHaveProperty('message', 'Note successfully deleted');
     });
 });
