@@ -8,7 +8,8 @@ export async function getAuthToken(request: APIRequestContext): Promise<string> 
     });
     expect(loginResponse.ok()).toBeTruthy();
     const loginResponseBody = await loginResponse.json();
-    expect(loginResponseBody).toHaveProperty('token');
+    expect(loginResponseBody).toHaveProperty('data');
+    expect(loginResponseBody.data).toHaveProperty('token');
     return loginResponseBody.data.token;
 }
 
