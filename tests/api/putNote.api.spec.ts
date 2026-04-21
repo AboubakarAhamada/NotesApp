@@ -35,39 +35,49 @@ test.describe('Update Note API', () => {
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
 
         // Update the note
+        const nodeBody = {
+            title: 'Updated note',
+            category: 'Personal',
+            description: 'Note has been updated successfully',
+            completed: true
+        };
         const noteResponse = await request.put(EnvData.BASE_URL + '/api/notes/' + noteId, {
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-auth-token': token
             },
-            form: {
-                title: 'Updated note',
-                category: 'Personal',
-                description: 'Note has been updated successfully',
-                completed: true
-            }
+            form: nodeBody
         });
+        expect(noteResponse.status()).toBe(200);
+
         const noteResponseBody = await noteResponse.json();
         console.log(noteResponseBody);
-        expect(noteResponse.status()).toBe(200);
+        expect(noteResponseBody.data.title).toBe(nodeBody.title);
+        expect(noteResponseBody.data.description).toBe(nodeBody.description);
+        expect(noteResponseBody.data.category).toBe(nodeBody.category);
+        expect(noteResponseBody.data.completed).toBe(true);
+        expect(noteResponseBody.data).toHaveProperty('id');
+        expect(noteResponseBody.data).toHaveProperty('created_at');
+        expect(noteResponseBody.data).toHaveProperty('updated_at');
+        expect(noteResponseBody.data).toHaveProperty('user_id');
 
     });
 
-    // test.afterEach(async ({ request }) => {
-    //     // Login to get the authentication token
-    //     const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login',
-    //         {
-    //             data: loginData
-    //         }
-    //     );
-    //     const loginResponseBody = await loginResponse.json();
-    //     const token = loginResponseBody.data.token;
-    //     await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {
-    //         headers: {
-    //             'accept': 'application/json',
-    //             'X-auth-token': token
-    //         }
-    //     });
-    // });
+    test.afterEach(async ({ request }) => {
+        // Login to get the authentication token
+        const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login',
+            {
+                data: loginData
+            }
+        );
+        const loginResponseBody = await loginResponse.json();
+        const token = loginResponseBody.data.token;
+        await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {
+            headers: {
+                'accept': 'application/json',
+                'X-auth-token': token
+            }
+        });
+    });
 });

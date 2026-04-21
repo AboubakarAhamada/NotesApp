@@ -41,10 +41,11 @@ test.describe('Delete Note API', () => {
                 'X-auth-token': token
             }
         });
-        const noteResponseBody = await noteResponse.json();
-        console.log(noteResponseBody);
         expect(noteResponse.status()).toBe(200);
 
+        const noteResponseBody = await noteResponse.json();
+        console.log(noteResponseBody);
+        expect(noteResponseBody).toHaveProperty('success', true);
+        expect(noteResponseBody).toHaveProperty('message', 'Note successfully deleted'); 
     });
-
 });
