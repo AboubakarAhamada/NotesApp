@@ -25,7 +25,6 @@ test.describe('Update Note API', () => {
             }
         });
         expect(newNoteResponse.status()).toBe(200);
-        expect(newNoteResponse.ok()).toBeTruthy();
         const newNoteResponseBody = await newNoteResponse.json();
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
 
