@@ -56,23 +56,6 @@ test.describe('Patch Note API', () => {
     });
 
     test.afterEach(async ({ request }) => {
-        // Login to get the authentication token
-        const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login',
-            {
-                data: loginData
-            }
-        );
-        const loginResponseBody = await loginResponse.json();
-        const token = loginResponseBody.data.token;
-        await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {
-            headers: {
-                'accept': 'application/json',
-                'X-auth-token': token
-            }
-        });
-    });
-
-    test.afterEach(async ({ request }) => {
         token = await getAuthToken(request);
 
         await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {

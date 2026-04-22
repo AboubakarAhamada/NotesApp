@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { EnvData } from '../../fixtures/env';
-import { loginData } from '../../fixtures/login_data';
 import { authHeaders, getAuthToken } from '../../fixtures/auth.api';
 
 test.describe('Update Note API', () => {
