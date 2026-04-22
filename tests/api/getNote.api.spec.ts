@@ -21,8 +21,12 @@ test.describe('Get Note API', () => {
                 description: 'This note will be retrieved by id in the test'
             }
         });
+        expect(newNoteResponse.status()).toBe(200);
+        expect(newNoteResponse.ok()).toBeTruthy();
+
         const newNoteResponseBody = await newNoteResponse.json();
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
+        
         const noteResponse = await request.get(EnvData.BASE_URL + '/api/notes/' + noteId, {
             headers: {
                 'X-Auth-Token': token

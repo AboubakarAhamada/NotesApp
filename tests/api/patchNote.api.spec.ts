@@ -6,12 +6,12 @@ import { authHeaders, getAuthToken } from '../../fixtures/auth.api';
 test.describe('Patch Note API', () => {
     let noteId: string;
     let token: string;
-      test.beforeAll(async ({ request }) => {
+    test.beforeAll(async ({ request }) => {
         token = await getAuthToken(request);
         console.log('Token from beforeAll:', token);
-      });
+    });
     test('should update existing note status', async ({ request }) => {
-        
+
         // Add a new note
         const nodeBody = {
             title: 'Note to Update',
@@ -19,13 +19,15 @@ test.describe('Patch Note API', () => {
             description: 'This note will be updated in the test'
         };
         const newNoteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
-            headers:authHeaders(token),
+            headers: authHeaders(token),
             form: {
                 title: 'Note to Update',
                 category: 'Personal',
                 description: 'This note will be updated in the test'
             }
         });
+        expect(newNoteResponse.status()).toBe(200);
+        expect(newNoteResponse.ok()).toBeTruthy();
         const newNoteResponseBody = await newNoteResponse.json();
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
 

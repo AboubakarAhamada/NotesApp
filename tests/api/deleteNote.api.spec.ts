@@ -22,6 +22,9 @@ test.describe('Delete Note API', () => {
                 description: 'This note will be updated in the test'
             }
         });
+        expect(newNoteResponse.status()).toBe(200);
+        expect(newNoteResponse.ok()).toBeTruthy();
+
         const newNoteResponseBody = await newNoteResponse.json();
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
 

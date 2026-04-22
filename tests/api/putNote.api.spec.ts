@@ -14,7 +14,7 @@ test.describe('Update Note API', () => {
     });
 
     test('should update existing note successfully', async ({ request }) => {
-        
+
         // Add a new note
         const newNoteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
             headers: authHeaders(token),
@@ -24,6 +24,8 @@ test.describe('Update Note API', () => {
                 description: 'This note will be updated in the test'
             }
         });
+        expect(newNoteResponse.status()).toBe(200);
+        expect(newNoteResponse.ok()).toBeTruthy();
         const newNoteResponseBody = await newNoteResponse.json();
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
 
