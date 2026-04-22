@@ -9,6 +9,10 @@ export default defineConfig({
 
   // Lancer les tests en parallèle
   fullyParallel: false,
+
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 2 : undefined,
+
   reporter: [
     ['list'],
     ['html', { open: 'on-failure' }]
@@ -38,9 +42,9 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-      
+
       },
-      
+
     },
 
     // {
