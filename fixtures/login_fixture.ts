@@ -1,7 +1,14 @@
 import { test as base, Page, BrowserContext } from '@playwright/test';
+import { LoginPage } from '../pages/loginPage';
+
 import { blockAds } from '../utils/adBlocker';
 
+const login = process.env.APP_LOGIN;
+const password = process.env.APP_PASSWORD;
 
+if (!login || !password) {
+  throw new Error('Missing APP_LOGIN or APP_PASSWORD');
+}
 
 export const test = base.extend<{
   loggedPage: Page;
@@ -16,11 +23,11 @@ export const test = base.extend<{
         await newPage.close();
       } catch (e) { }
     });
-
-    await page.goto(EnvData.BASE_URL +'app/login');
-    await page.fill('#email', 'testoto@gmail.com');
-    await page.fill('#password', 'testoto');
-    await page.getByTestId('login-submit').click();
+    const loginPage = new LoginPage(page);
+    await page.goto('/notes/app/login');
+    await loginPage.fillEmail(String(login));
+    await loginPage.fillPassword(String(password));
+    await loginPage.submitForm();
     await page.waitForURL('**/notes/app', { timeout: 10000 });
 
     await use(page);
