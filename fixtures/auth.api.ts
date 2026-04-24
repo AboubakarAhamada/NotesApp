@@ -1,4 +1,3 @@
-import { loginData } from "./login_data";
 import { APIRequestContext, expect } from "@playwright/test"; 
 
 
@@ -11,7 +10,10 @@ if (!login || !password) {
 
 export async function getAuthToken(request: APIRequestContext): Promise<string> {
     const loginResponse = await request.post('/notes/api/users/login', {
-        data: loginData,
+        data: {
+            email: login,
+            password: password
+        },
     });
     expect(loginResponse.ok()).toBeTruthy();
     const loginResponseBody = await loginResponse.json();

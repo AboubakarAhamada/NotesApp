@@ -1,7 +1,6 @@
 import {test,expect} from '@playwright/test';
 import { RegisterPage } from '../../pages/registrerPage';
 import { registerData } from '../../fixtures/register_data';
-import { EnvData } from '../../fixtures/env';
 import { blockAds } from '../../utils/adBlocker';
 
 
@@ -23,7 +22,7 @@ test.describe('Testing Registration Page', () => {
     });
 
     registerPage = new RegisterPage(page);
-    await page.goto(EnvData.BASE_URL + '/app/register');
+    await page.goto('/notes/app/register');
   });
 
   test('should register a new user', async ({ page }) => {

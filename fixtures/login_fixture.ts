@@ -1,5 +1,4 @@
 import { test as base, Page, BrowserContext } from '@playwright/test';
-import { EnvData } from '../fixtures/env';
 import { blockAds } from '../utils/adBlocker';
 
 

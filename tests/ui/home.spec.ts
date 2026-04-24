@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '../../pages/homePage';
-import { EnvData } from '../../fixtures/env';
 import { blockAds } from '../../utils/adBlocker';
 
 
@@ -20,7 +19,7 @@ test.describe('Testing Homepage', () => {
       await newPage.close();
     });
 
-    await page.goto(EnvData.BASE_URL+"/app");
+    await page.goto("/notes/app");
   });
 
   test('Verify welcome message', async ({ page }) => {
