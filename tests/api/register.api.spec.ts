@@ -4,7 +4,7 @@ import { EnvData } from '../../fixtures/env';
 
 test.describe('Testing Register API', () => {
     test('should register a new user with valid email, name, and password', async ({request}) => {
-        const response = await request.post(EnvData.BASE_URL + '/api/users/register', {
+        const response = await request.post('/notes/api/users/register', {
             data: registerData
         });
         console.log(await response.json());
@@ -18,7 +18,7 @@ test.describe('Testing Register API', () => {
     });
 
     test('should not register a new user with invalid data', async ({request}) => {
-        const response = await request.post(EnvData.BASE_URL + '/api/users/register', {
+        const response = await request.post('/notes/api/users/register', {
             data: {
                 email: 'invalid-email',
                 password: 'short',

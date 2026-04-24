@@ -1,4 +1,6 @@
 /// <reference types="node" />
+import 'dotenv/config';
+
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
@@ -23,7 +25,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    baseURL: 'https://practice.expandtesting.com/notes/app',
+    baseURL: 'https://practice.expandtesting.com',
     headless: true,
     actionTimeout: 10000, // Timeout pour les actions (click, fill, etc.)
     navigationTimeout: 30000, // Timeout pour les navigations

@@ -1,10 +1,17 @@
-import { EnvData } from "./env";
 import { loginData } from "./login_data";
 import { APIRequestContext, expect } from "@playwright/test"; 
 
+
+const login = process.env.APP_LOGIN;
+const password = process.env.APP_PASSWORD;
+
+if (!login || !password) {
+  throw new Error('Missing APP_LOGIN or APP_PASSWORD');
+}
+
 export async function getAuthToken(request: APIRequestContext): Promise<string> {
-    const loginResponse = await request.post(EnvData.BASE_URL + '/api/users/login', {
-        data: loginData
+    const loginResponse = await request.post('/notes/api/users/login', {
+        data: loginData,
     });
     expect(loginResponse.ok()).toBeTruthy();
     const loginResponseBody = await loginResponse.json();

@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { EnvData } from '../../fixtures/env';
 import { authHeaders, getAuthToken } from '../../fixtures/auth.api';
 
 test.describe('Update Note API', () => {
@@ -16,7 +15,7 @@ test.describe('Update Note API', () => {
     test('should update existing note successfully', async ({ request }) => {
 
         // Add a new note
-        const newNoteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
+        const newNoteResponse = await request.post('/notes/api/notes', {
             headers: authHeaders(token),
             form: {
                 title: 'Note to Update',
@@ -35,7 +34,7 @@ test.describe('Update Note API', () => {
             description: 'Note has been updated successfully',
             completed: true
         };
-        const noteResponse = await request.put(EnvData.BASE_URL + '/api/notes/' + noteId, {
+        const noteResponse = await request.put('/notes/api/notes/' + noteId, {
             headers: authHeaders(token),
             form: nodeBody
         });
@@ -57,7 +56,7 @@ test.describe('Update Note API', () => {
     test.afterEach(async ({ request }) => {
         token = await getAuthToken(request);
 
-        await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {
+        await request.delete('/notes/api/notes/' + noteId, {
             headers: authHeaders(token)
         });
     });

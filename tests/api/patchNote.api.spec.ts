@@ -1,6 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { EnvData } from '../../fixtures/env';
-import { loginData } from '../../fixtures/login_data';
 import { authHeaders, getAuthToken } from '../../fixtures/auth.api';
 
 test.describe('Patch Note API', () => {
@@ -18,7 +16,7 @@ test.describe('Patch Note API', () => {
             category: 'Personal',
             description: 'This note will be updated in the test'
         };
-        const newNoteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
+        const newNoteResponse = await request.post('/notes/api/notes', {
             headers: authHeaders(token),
             form: {
                 title: 'Note to Update',
@@ -31,7 +29,7 @@ test.describe('Patch Note API', () => {
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
 
         // Patch the note
-        const noteResponse = await request.patch(EnvData.BASE_URL + '/api/notes/' + noteId, {
+        const noteResponse = await request.patch('/notes/api/notes/' + noteId, {
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -59,7 +57,7 @@ test.describe('Patch Note API', () => {
     test.afterEach(async ({ request }) => {
         token = await getAuthToken(request);
 
-        await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {
+        await request.delete('/notes/api/notes' + noteId, {
             headers: authHeaders(token)
         });
     });

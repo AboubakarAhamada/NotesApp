@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { EnvData } from '../../fixtures/env';
 import { authHeaders, getAuthToken } from '../../fixtures/auth.api';
 
 test.describe('Get Note API', () => {
@@ -13,7 +12,7 @@ test.describe('Get Note API', () => {
     test("should get note by Id for authenticated user", async ({ request }) => {
 
         // Add a new note
-        const newNoteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
+        const newNoteResponse = await request.post('notes/api/notes', {
             headers: authHeaders(token),
             form: {
                 title: 'Note to retrieve by id',
@@ -27,7 +26,7 @@ test.describe('Get Note API', () => {
         const newNoteResponseBody = await newNoteResponse.json();
         noteId = newNoteResponseBody.data.id; // Assuming the response contains the new note's ID
         
-        const noteResponse = await request.get(EnvData.BASE_URL + '/api/notes/' + noteId, {
+        const noteResponse = await request.get('/notes/api/notes/' + noteId, {
             headers: {
                 'X-Auth-Token': token
             }
@@ -57,7 +56,7 @@ test.describe('Get Note API', () => {
 
     test("should get all notes for authenticated user", async ({ request }) => {
 
-        const notesResponse = await request.get(EnvData.BASE_URL + '/api/notes', {
+        const notesResponse = await request.get('/notes/api/notes', {
             headers: {
                 'X-Auth-Token': token
             }
@@ -83,4 +82,14 @@ test.describe('Get Note API', () => {
             expect(note).toHaveProperty('user_id');
         }
     });
+
+    test.afterEach(async ({ request }) => {
+        token = await getAuthToken(request);
+
+        await request.delete('/notes/api/notes/' + noteId, {
+            headers: authHeaders(token)
+        });
+        console.log(process.env.APP_LOGIN);
+    });
+    
 });

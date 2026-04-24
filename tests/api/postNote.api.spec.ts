@@ -28,7 +28,7 @@ test.describe('Add Note API', () => {
       category: 'Personal',
       description: 'This is a new note for testing purpose'
     };
-    const noteResponse = await request.post(EnvData.BASE_URL + '/api/notes', {
+    const noteResponse = await request.post('/notes/api/notes', {
       headers: authHeaders(token),
       form: nodeBody
     });
@@ -50,7 +50,7 @@ test.describe('Add Note API', () => {
   test.afterEach(async ({ request }) => {
     token = await getAuthToken(request);
 
-    await request.delete(EnvData.BASE_URL + '/api/notes/' + noteId, {
+    await request.delete('/notes/api/notes' + noteId, {
       headers: authHeaders(token)
     });
   });
