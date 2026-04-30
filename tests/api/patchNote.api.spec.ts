@@ -57,7 +57,7 @@ test.describe('Patch Note API', () => {
     test.afterEach(async ({ request }) => {
         token = await getAuthToken(request);
 
-        await request.delete('/notes/api/notes' + noteId, {
+        await request.delete('/notes/api/notes/' + noteId, {
             headers: authHeaders(token)
         });
     });
