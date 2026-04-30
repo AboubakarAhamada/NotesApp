@@ -1,8 +1,7 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { NotesPage } from '../../pages/notesPage';
 
-
-test.describe('Testing Add Note Functionality', () => {
+test.describe('Testing Deleting Note Functionality', () => {
 
     test.beforeEach(async ({ page, context }) => {
         await page.goto('/notes/app');
@@ -34,38 +33,30 @@ test.describe('Testing Add Note Functionality', () => {
             } catch (e) { }
         });
     });
+
     test.use({ storageState: 'playwright/.auth/user.json' });
-    test('user should add a new note', async ({ page }) => {
-        test.info().annotations.push({ type: 'cleanup', description: 'Test which needs a cleanup' });
 
-        const note = {
-            category: 'Work',
-            isCompleted: false,
-            title: 'Finish report',
-            description: 'Complete the quarterly report by Friday'
-        };
+    test('user should delete a note', async ({ page }) => {
         const notesPage = new NotesPage(page);
-        await notesPage.openAddNoteForm();
-        await notesPage.fullNoteForm(note.category, note.isCompleted, note.title, note.description);
-        await notesPage.submitNoteForm();
-
-        // Vérifier que la note a été ajoutée
-        await notesPage.verifyNoteAdded(note.title, note.description);
-
+        await notesPage.addNote('Personal', true, 'Test Note to Delete', 'This note will be deleted in the test');
+        await notesPage.deleteNote();
     });
 
-    test('user should cancel adding a new note', async ({ page }) => {
-        const note = {
-            category: 'Personal',
-            isCompleted: false,
-            title: 'Buy groceries',
-            description: 'Get milk, bread, and eggs'
-        };
+    test('user should cancel deleting a note', async ({ page }) => {
+        test.info().annotations.push({ type: 'cleanup', description: 'Test which needs a cleanup' });
         const notesPage = new NotesPage(page);
-        await notesPage.openAddNoteForm();
-        await notesPage.fullNoteForm(note.category, note.isCompleted, note.title, note.description);
-        await notesPage.cancelNoteForm();
-        // Vérifier que la note n'a pas été ajoutée
+        // Add one note to ensure there is a note to delete
+        await notesPage.addNote('Work', false, 'Note 1', 'First note to delete');
+        await notesPage.cancelDeleteNote();
+        await notesPage.verifyNoteExists('Note 1', 'First note to delete');
+    });
+
+    test('user should delete all notes', async ({ page }) => {
+        const notesPage = new NotesPage(page);
+        // Add one note to ensure there is a note to delete
+        await notesPage.addNote('Work', false, 'Note 1', 'First note to delete');
+
+        await notesPage.deleteAllNotes();
     });
 
     test.afterEach(async ({ page }, testInfo) => {
@@ -75,4 +66,4 @@ test.describe('Testing Add Note Functionality', () => {
             await notesPage.deleteNote();
         }
     });
-}); 
+});
