@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { AppPage } from '../../pages/appPage';
+import { NotesPage } from '../../pages/notesPage';
 
 
 test.describe('Testing Add Note Functionality', () => {
@@ -36,11 +36,19 @@ test.describe('Testing Add Note Functionality', () => {
     });
     test.use({ storageState: 'playwright/.auth/user.json' });
     test('user1 should add a new note', async ({ page }) => {
-        const appPage = new AppPage(page);
-        await appPage.clickAddNoteButton();
-        // await appPage.fullNoteForm('Work', false, 'Finish report', 'Complete the quarterly report by Friday');
-        // await appPage.submitNoteForm();
+        const note = {
+            category: 'Work',
+            isCompleted: false,
+            title: 'Finish report',
+            description: 'Complete the quarterly report by Friday'
+        };
+        const notesPage = new NotesPage(page);
+        await notesPage.clickAddNoteButton();
+        await notesPage.fullNoteForm(note.category, note.isCompleted, note.title, note.description);
+        await notesPage.submitNoteForm();
 
-        // Verify the note was added
+        // Vérifier que la note a été ajoutée
+        await notesPage.verifyNoteAdded(note.title, note.description);
+
     });
 }); 

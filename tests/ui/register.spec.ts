@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test} from '@playwright/test';
 import { RegisterPage } from '../../pages/registrerPage';
 import { registerData } from '../../fixtures/register_data';
 import { blockAds } from '../../utils/adBlocker';

@@ -22,16 +22,17 @@ test.describe('Testing Homepage', () => {
     await page.goto("/notes/app");
   });
 
-  test('Verify welcome message', async ({ page }) => {
+  test('Verify welcome message', async () => {
     await homePage.verifyWelcomeMessage();
   });
 
-  test('Verify register button is visible', async ({ page }) => {
-    await expect(page.getByTestId('open-register-view')).toBeVisible();
+  test('Verify register button is visible', async () => {
+    await homePage.isRegisterButtonVisible();
+
   });
 
-  test('Verify login button is visible', async ({ page }) => {
-    await expect(page.getByTestId('open-login-view')).toBeVisible();
+  test('Verify login button is visible', async () => {
+    await homePage.isLoginButtonVisible();
   });
 
   test('Verify navigation to register page', async ({ page }) => {
