@@ -89,7 +89,6 @@ test.describe('Get Note API', () => {
         await request.delete('/notes/api/notes/' + noteId, {
             headers: authHeaders(token)
         });
-        console.log(process.env.APP_LOGIN);
     });
     
 });
