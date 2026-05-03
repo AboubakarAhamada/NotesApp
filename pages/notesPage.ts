@@ -20,6 +20,13 @@ export class NotesPage {
     readonly noteCard: Locator;
     readonly noNotesMessage: Locator;
     readonly noNotesMessageText: string = "You don't have any notes in all categories";
+    readonly titleRequiredMessage: string = "Title is required";
+    readonly titleLengthMessage: string = "Title should be between 4 and 100 characters";
+    readonly descriptionRequiredMessage: string = "Description is required";
+    readonly descriptionLengthMessage: string = "Description should be between 4 and 1000 characters";
+    readonly alertMessage : Locator; 
+    readonly alertTitleMessage: string = "Title must be between 4 and 100 characters";
+    readonly alertDescriptionMessage: string = "Description must be between 4 and 1000 characters";
 
     constructor(page: Page) {
         this.page = page;
@@ -40,6 +47,7 @@ export class NotesPage {
         this.listOfNotes = this.page.getByTestId('notes-list');
         this.noteCard = this.page.getByTestId('note-card');
         this.noNotesMessage = this.page.getByTestId('no-notes-message');
+        this.alertMessage = this.page.getByTestId('alert-message');
     }
 
     async openAddNoteForm() {
