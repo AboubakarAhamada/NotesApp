@@ -79,10 +79,10 @@ test.describe('Testing Add Note Functionality', () => {
         await expect(descriptionRequiredMessage).toBeVisible();
     });
 
-    test('user should see validation messages when submitting form with short title and description', async ({ page }) => { 
+    test('user should see validation messages when submitting form with short title and description', async ({ page }) => {
         const note = {
             category: 'Work',
-            isCompleted: false, 
+            isCompleted: false,
             title: 'abc',
             description: 'xyz'
         };
@@ -133,7 +133,8 @@ test.describe('Testing Add Note Functionality', () => {
         await notesPage.submitNoteForm();
         // Vérifier le message d'erreur
         const errorMessage = notesPage.alertMessage;
-        await expect(errorMessage).toContainText(notesPage.alertTitleMessage);
+        await expect(errorMessage).toBeVisible();
+        await expect(errorMessage).toHaveText(notesPage.alertTitleMessage);
     });
 
     test('user should see alert message when submitting form with description composed of spaces', async ({ page }) => {
@@ -149,7 +150,8 @@ test.describe('Testing Add Note Functionality', () => {
         await notesPage.submitNoteForm();
         // Vérifier le message d'erreur
         const errorMessage = notesPage.alertMessage;
-        await expect(errorMessage).toContainText(notesPage.alertDescriptionMessage);
+        await expect(errorMessage).toBeVisible();
+        await expect(errorMessage).toHaveText(notesPage.alertDescriptionMessage);
     });
 
     test.afterEach(async ({ page }, testInfo) => {
