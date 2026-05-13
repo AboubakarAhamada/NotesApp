@@ -36,5 +36,27 @@ test.describe('Testing Login Page', () => {
         await expect(page.getByTestId('logout')).toBeVisible();
         await expect(page.getByTestId('profile')).toBeVisible();
     });
-});
 
+    test('should show error with invalid credentials', async ({ page }) => {
+
+        const loginPage = new LoginPage(page);
+        await page.goto('/notes/app/login');
+        await loginPage.fillEmail('invalid@example.com');
+        await loginPage.fillPassword('wrongpassword');
+        await loginPage.submitForm();
+        // Vérifier le message d'erreur
+        const errorMessage = loginPage.errorMessage;
+        await expect(errorMessage).toBeVisible();
+        await expect(errorMessage).toHaveText(loginPage.alertMessage);
+    });
+
+    test('should show validation errors for empty fields', async ({ page }) => {
+
+        const loginPage = new LoginPage(page);
+        await page.goto('/notes/app/login');
+        await loginPage.submitForm();
+        // Vérifier les messages d'erreur de validation
+        await expect(loginPage.emptyEmailMessage).toBeVisible();
+        await expect(loginPage.emptyPasswordMessage).toBeVisible();
+    });
+});
