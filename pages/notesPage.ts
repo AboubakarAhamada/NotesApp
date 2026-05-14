@@ -123,9 +123,7 @@ export class NotesPage {
     }
 
     async verifyNoteExists(title: string, description: string) {
-        const noteCardTitle = await this.noteCardTitle.textContent();
-        const noteCardDescription = await this.noteCardDescription.textContent();
-        expect(noteCardTitle).toBe(title);
-        expect(noteCardDescription).toBe(description);
+       await expect(this.noteCardTitle).toHaveText(title);
+        await expect(this.noteCardDescription).toHaveText(description);
     }
 }
