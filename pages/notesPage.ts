@@ -74,10 +74,8 @@ export class NotesPage {
     }
 
     async verifyNoteAdded(title: string, description: string) {
-        const noteCardTitle = await this.noteCardTitle.textContent();
-        expect(noteCardTitle).toBe(title);
-        const noteCardDescription = await this.noteCardDescription.textContent();
-        expect(noteCardDescription).toBe(description);
+        await expect(this.noteCardTitle).toHaveText(title);
+        await expect(this.noteCardDescription).toHaveText(description);
     }
 
     async addNote(category: string, isCompleted: boolean, title: string, description: string) {
