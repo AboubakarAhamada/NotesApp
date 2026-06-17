@@ -31,8 +31,4 @@ export class LoginPage {
     async submitForm(){
         await this.submitButton.click();
     }
-     async verifySuccessfulLogin(URL: string) {
-      const currentUrl = this.page.url();
-      expect(currentUrl).toBe(URL);
-    }
 }

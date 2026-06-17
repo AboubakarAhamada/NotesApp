@@ -1,4 +1,4 @@
-import {test} from '@playwright/test';
+import {test, expect} from '@playwright/test';
 import { RegisterPage } from '../../pages/registrerPage';
 import { registerData } from '../../fixtures/register_data';
 import { blockAds } from '../../utils/adBlocker';
@@ -32,6 +32,6 @@ test.describe('Testing Registration Page', () => {
     await registerPage.fillName(registerData.name);
     await registerPage.fillConfirmPassword(registerData.confirmPassword);
     await registerPage.submitForm();
-    await registerPage.verifySuccessMessage();
+    await expect(registerPage.successMessageLocator).toBeVisible();
   });
 });

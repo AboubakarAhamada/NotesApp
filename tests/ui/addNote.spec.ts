@@ -50,7 +50,9 @@ test.describe('Testing Add Note Functionality', () => {
         await notesPage.submitNoteForm();
 
         // Vérifier que la note a été ajoutée
-        await notesPage.verifyNoteAdded(note.title, note.description);
+        await expect(notesPage.noteCard).toBeVisible();
+        await expect(notesPage.noteCardTitle).toHaveText(note.title);
+        await expect(notesPage.noteCardDescription).toHaveText(note.description);
 
     });
 

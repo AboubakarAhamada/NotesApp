@@ -73,16 +73,11 @@ export class NotesPage {
         await this.noteCancelButton.click();
     }
 
-    async verifyNoteAdded(title: string, description: string) {
-        await expect(this.noteCardTitle).toHaveText(title);
-        await expect(this.noteCardDescription).toHaveText(description);
-    }
 
     async addNote(category: string, isCompleted: boolean, title: string, description: string) {
         await this.openAddNoteForm();
         await this.fullNoteForm(category, isCompleted, title, description);
         await this.submitNoteForm();
-        await this.verifyNoteAdded(title, description);
     }
 
     async openDeleteNoteDialog() {
@@ -111,19 +106,5 @@ export class NotesPage {
         for (let i = 0; i < notesCount; i++) {
             await this.deleteNote();
         }
-        await expect(this.noNotesMessage).toBeVisible();
-        const noNotesMessageText = await this.noNotesMessage.textContent();
-        expect(noNotesMessageText).toBe(this.noNotesMessageText);
-    }
-
-    async cancelDeleteNote() {
-        await this.openDeleteNoteDialog();
-        await this.deleteNoteCancelButton.click();
-        await expect(this.deleteNoteDialog).not.toBeVisible();
-    }
-
-    async verifyNoteExists(title: string, description: string) {
-       await expect(this.noteCardTitle).toHaveText(title);
-        await expect(this.noteCardDescription).toHaveText(description);
     }
 }

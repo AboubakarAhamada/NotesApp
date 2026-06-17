@@ -36,9 +36,6 @@ export class RegisterPage {
     async submitForm() {
         await this.submitButton.click();
     }
-    async verifySuccessMessage() {
-        await expect(this.successMessageLocator).toBeVisible();
-    }
 }
 
 

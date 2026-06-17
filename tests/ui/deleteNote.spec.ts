@@ -45,10 +45,21 @@ test.describe('Testing Deleting Note Functionality', () => {
     test('user should cancel deleting a note', async ({ page }) => {
         test.info().annotations.push({ type: 'cleanup', description: 'Test which needs a cleanup' });
         const notesPage = new NotesPage(page);
+        const note = {
+            category: 'Work',
+            isCompleted: false,
+            title: 'Finish report',
+            description: 'Complete the quarterly report by Friday'
+        };
         // Add one note to ensure there is a note to delete
-        await notesPage.addNote('Work', false, 'Note 1', 'First note to delete');
-        await notesPage.cancelDeleteNote();
-        await notesPage.verifyNoteExists('Note 1', 'First note to delete');
+        await notesPage.addNote(note.category, note.isCompleted, note.title, note.description);
+
+        await notesPage.openDeleteNoteDialog();
+        await notesPage.closeDeleteDialog();
+        await expect(notesPage.noteCard).toBeVisible(); // Vérifier que la note est toujours présente après l'annulation de la suppression
+        await expect(notesPage.noteCardTitle).toHaveText(note.title);
+        await expect(notesPage.noteCardDescription).toHaveText(note.description);
+
     });
 
     test('user should delete all notes', async ({ page }) => {
@@ -56,7 +67,9 @@ test.describe('Testing Deleting Note Functionality', () => {
         // Add one note to ensure there is a note to delete
         await notesPage.addNote('Work', false, 'Note 1', 'First note to delete');
 
-        await notesPage.deleteAllNotes();
+        await expect(notesPage.noNotesMessage).toBeVisible();
+        const noNotesMessageText = await notesPage.noNotesMessage.textContent();
+        expect(noNotesMessageText).toBe(notesPage.noNotesMessageText);
     });
 
     test.afterEach(async ({ page }, testInfo) => {
