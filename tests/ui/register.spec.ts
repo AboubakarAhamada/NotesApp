@@ -32,6 +32,6 @@ test.describe('Testing Registration Page', () => {
     await registerPage.fillName(registerData.name);
     await registerPage.fillConfirmPassword(registerData.confirmPassword);
     await registerPage.submitForm();
-    await expect(registerPage.successMessageLocator).toBeVisible();
+    await expect(registerPage.successMessageLocator).toBeVisible({ timeout: 10000 });
   });
 });

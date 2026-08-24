@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { NotesPage } from '../../pages/notesPage';
 
 test.describe('Testing Deleting Note Functionality', () => {
+    test.use({ storageState: 'playwright/.auth/user.json' });
 
     test.beforeEach(async ({ page, context }) => {
         await page.goto('/notes/app');
@@ -34,8 +35,6 @@ test.describe('Testing Deleting Note Functionality', () => {
         });
     });
 
-    test.use({ storageState: 'playwright/.auth/user.json' });
-
     test('user should delete a note', async ({ page }) => {
         const notesPage = new NotesPage(page);
         await notesPage.addNote('Personal', true, 'Test Note to Delete', 'This note will be deleted in the test');
@@ -56,9 +55,11 @@ test.describe('Testing Deleting Note Functionality', () => {
 
         await notesPage.openDeleteNoteDialog();
         await notesPage.closeDeleteDialog();
-        await expect(notesPage.noteCard).toBeVisible(); // Vérifier que la note est toujours présente après l'annulation de la suppression
-        await expect(notesPage.noteCardTitle).toHaveText(note.title);
-        await expect(notesPage.noteCardDescription).toHaveText(note.description);
+        // Vérifier que la note ajoutée est toujours présente (cibler la carte par titre)
+        const createdCard = page.getByTestId('note-card').filter({ hasText: note.title });
+        await expect(createdCard).toBeVisible();
+        await expect(createdCard.getByTestId('note-card-title')).toHaveText(note.title);
+        await expect(createdCard.getByTestId('note-card-description')).toHaveText(note.description);
 
     });
 
@@ -66,7 +67,8 @@ test.describe('Testing Deleting Note Functionality', () => {
         const notesPage = new NotesPage(page);
         // Add one note to ensure there is a note to delete
         await notesPage.addNote('Work', false, 'Note 1', 'First note to delete');
-
+        // Delete all notes and assert that the "no notes" message is visible
+        await notesPage.deleteAllNotes();
         await expect(notesPage.noNotesMessage).toBeVisible();
         const noNotesMessageText = await notesPage.noNotesMessage.textContent();
         expect(noNotesMessageText).toBe(notesPage.noNotesMessageText);

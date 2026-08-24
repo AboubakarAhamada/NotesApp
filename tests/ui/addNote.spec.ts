@@ -4,6 +4,8 @@ import { NotesPage } from '../../pages/notesPage';
 
 test.describe('Testing Add Note Functionality', () => {
 
+    test.use({ storageState: 'playwright/.auth/user.json' });
+
     test.beforeEach(async ({ page, context }) => {
         await page.goto('/notes/app');
         // Bloquer les publicités et overlays
@@ -34,7 +36,6 @@ test.describe('Testing Add Note Functionality', () => {
             } catch (e) { }
         });
     });
-    test.use({ storageState: 'playwright/.auth/user.json' });
     test('user should add a new note', async ({ page }) => {
         test.info().annotations.push({ type: 'cleanup', description: 'Test which needs a cleanup' });
 
@@ -49,10 +50,11 @@ test.describe('Testing Add Note Functionality', () => {
         await notesPage.fullNoteForm(note.category, note.isCompleted, note.title, note.description);
         await notesPage.submitNoteForm();
 
-        // Vérifier que la note a été ajoutée
-        await expect(notesPage.noteCard).toBeVisible();
-        await expect(notesPage.noteCardTitle).toHaveText(note.title);
-        await expect(notesPage.noteCardDescription).toHaveText(note.description);
+        // Vérifier que la note a été ajoutée (cibler la carte par titre pour éviter les collisions)
+        const createdCard = page.getByTestId('note-card').filter({ hasText: note.title });
+        await expect(createdCard).toBeVisible();
+        await expect(createdCard.getByTestId('note-card-title')).toHaveText(note.title);
+        await expect(createdCard.getByTestId('note-card-description')).toHaveText(note.description);
 
     });
 

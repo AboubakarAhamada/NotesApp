@@ -69,6 +69,10 @@ export class NotesPage {
         await this.noteSubmitButton.click();
     }
 
+    getCardByTitle(title: string) {
+        return this.page.getByTestId('note-card').filter({ hasText: title });
+    }
+
     async cancelNoteForm() {
         await this.noteCancelButton.click();
     }
@@ -78,6 +82,9 @@ export class NotesPage {
         await this.openAddNoteForm();
         await this.fullNoteForm(category, isCompleted, title, description);
         await this.submitNoteForm();
+        // Wait for the created note card to appear to avoid flakiness
+        const createdCard = this.getCardByTitle(title);
+        await expect(createdCard).toBeVisible({ timeout: 10000 });
     }
 
     async openDeleteNoteDialog() {
@@ -102,9 +109,18 @@ export class NotesPage {
     }
 
     async deleteAllNotes() {
-        const notesCount = await this.listOfNotes.locator(this.noteCard).count();
-        for (let i = 0; i < notesCount; i++) {
+        // Delete notes until none remain. Using a loop that re-queries the count
+        // avoids issues with dynamic lists and stale counts.
+        let count = await this.noteCard.count();
+        let safety = 0;
+        while (count > 0 && safety < 100) {
             await this.deleteNote();
+            // wait briefly for DOM update
+            await this.page.waitForTimeout(200);
+            const newCount = await this.noteCard.count();
+            if (newCount >= count) break; // nothing changed — avoid infinite loop
+            count = newCount;
+            safety++;
         }
     }
 }
